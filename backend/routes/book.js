@@ -7,12 +7,13 @@ const multer = require('../middelware/Upload');
 
 
 
+router.get('/bestrating', bookControllers.ByBestRating);
 router.get('/:id', bookControllers.getBookById);
 router.get('/', bookControllers.getBooks);
-router.get('/bestrating', bookControllers.ByBestRating);
-router.put('/:id', bookControllers.putBooksById);
-router.delete('/:id', bookControllers.deleteBooksById);
-router.post('/:id/rating', bookControllers.ByIdRating);
+router.put('/:id', auth, multer ,bookControllers.putBooksById);
+
+router.post('/:id/rating', auth ,bookControllers.ByIdRating);
 
 router.post('/', auth, multer, bookControllers.postBooksImg);
+router.delete('/:id', auth ,bookControllers.deleteBooksById);
 module.exports=router;

@@ -1,3 +1,4 @@
+const { text } = require('express');
 const Book = require('../models/book');
 
 exports.getBooks = async (req, res, next) => {
@@ -82,10 +83,10 @@ exports.putBooksById = (req, res, next) => {
               // Séparation du nom du fichier image existant
               const filename = book.imageUrl.split('/images/')[1];
               // Si l'image a été modifiée, on supprime l'ancienne
-              req.file && fs.unlink(`images/${filename}`, (err => {
+             /* req.file && fs.unlink(`images/${filename}`, (err => {
                       if (err) console.log(err);
                   })
-              );
+              );*/
               // Mise à jour du livre
               Book.updateOne({ _id: req.params.id }, { ...bookObject, _id: req.params.id })
                   .then(() => res.status(200).json({ message: 'Objet modifié !' }))
@@ -98,21 +99,23 @@ exports.putBooksById = (req, res, next) => {
 };
 
 exports.deleteBooksById = (req, res, next) => {
+   
    // Récupération du livre à supprimer
    Book.findOne({ _id: req.params.id })
-   .then(book => {
+   .then((book) => {
        // Le livre ne peut être supprimé que par le créateur de sa fiche
        if (book.userId != req.auth.userId) {
            res.status(403).json({ message: '403: unauthorized request' });
        } else {
+        console.log('text')
            // Séparation du nom du fichier image
            const filename = book.imageUrl.split('/images/')[1];
            // Suppression du fichier image puis suppression du livre dans la base de données dans la callback
-           fs.unlink(`images/${filename}`, () => {
+          /* fs.unlink(`images/${filename}`, () => {*/
                Book.deleteOne({ _id: req.params.id })
                    .then(() => { res.status(200).json({ message: 'Objet supprimé !' }) })
                    .catch(error => res.status(400).json({ error }));
-           });
+        /*   });*/
        }
    })
    .catch( error => {
