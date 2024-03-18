@@ -9,8 +9,8 @@ const app = express();
 /** securisation : configuration des en-têtes HTTP, la protection contre les attaques XSS, la désactivation de la mise en cache côté client, etc. **/
 const helmet = require('helmet');
 
-/**** création d'une couche de securité 
-require('dotenv').config();*/
+/**** création d'une couche de securité */
+require('dotenv').config();
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
